@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,6 +62,33 @@ public class AddressController {
 	public void deleteAddress(@PathVariable long id)
 	{
 		addressService.delete(id);
+	}
+
+	@PutMapping("/{id}")
+	public AddressDto updateAddress(@PathVariable long id, @RequestBody @Valid AddressDto addressDto)
+	{
+		if (addressDto == null || id != addressDto.getAddressId()){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+		}
+
+		Address address = findByIdOrThrow(id);
+
+		Address ad1 = addressMapper.dtoToAddress(addressDto);
+		Address updatedAddress = addressService.update(ad1);
+
+		return addressMapper.addressToDto(updatedAddress);
+	}
+
+	@PostMapping("/search")
+	public List<AddressDto> searchAddress(@RequestBody AddressDto addressDto)
+	{
+		if(addressDto == null){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+		}
+
+		Address example = addressMapper.dtoToAddress(addressDto);
+		List<Address> addressList = addressService.searchAddress(example);
+		return addressMapper.addressToDtoList(addressList);
 	}
 
 	private Address findByIdOrThrow(long id) {
