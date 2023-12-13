@@ -3,6 +3,9 @@ package hu.cubix.logistics.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -80,15 +84,21 @@ public class AddressController {
 	}
 
 	@PostMapping("/search")
-	public List<AddressDto> searchAddress(@RequestBody AddressDto addressDto)
+	public List<AddressDto> searchAddress(@RequestParam(required = false, value = "pageNumParam") int pageNumParam,
+										  @RequestParam(required = false, value = "pageSizeParam") int pageSizeParam,
+										  @RequestBody AddressDto example)
 	{
-		if(addressDto == null){
+		if(example == null){
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 		}
 
-		Address example = addressMapper.dtoToAddress(addressDto);
-		List<Address> addressList = addressService.searchAddress(example);
-		return addressMapper.addressToDtoList(addressList);
+		int pageNum = pageNumParam > -1 ? pageNumParam : 0;
+		int pageSize = pageSizeParam > 0 ? pageSizeParam : 10;
+
+		Pageable pageable = PageRequest.of(pageNum, pageSize);
+
+		Page<Address> page = addressService.searchAddress(example,pageable);
+		return addressMapper.addressToDtoList(page.getContent());
 	}
 
 	private Address findByIdOrThrow(long id) {
