@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -84,8 +86,9 @@ public class AddressController {
 	}
 
 	@PostMapping("/search")
-	public List<AddressDto> searchAddress(@RequestParam(required = false, value = "pageNumParam") int pageNumParam,
-										  @RequestParam(required = false, value = "pageSizeParam") int pageSizeParam,
+	public ResponseEntity searchAddress(@RequestParam(required = false, value = "pageNumParam", defaultValue = "-1") int pageNumParam,
+										  @RequestParam(required = false, value = "pageSizeParam", defaultValue = "0") int pageSizeParam,
+										  @RequestParam(required = false, value = "sortByParam") String sortByParam,
 										  @RequestBody AddressDto example)
 	{
 		if(example == null){
@@ -93,12 +96,33 @@ public class AddressController {
 		}
 
 		int pageNum = pageNumParam > -1 ? pageNumParam : 0;
-		int pageSize = pageSizeParam > 0 ? pageSizeParam : 10;
+		int pageSize = pageSizeParam > 0 ? pageSizeParam : Integer.MAX_VALUE;
 
-		Pageable pageable = PageRequest.of(pageNum, pageSize);
+		String sortBy = "addressId";
+		Sort.Direction sortOrder = Sort.Direction.ASC;
+
+		if(sortByParam != null) {
+
+			String[] orderParams = sortByParam.split(",");
+
+			if (orderParams.length == 2) {
+				sortBy = orderParams[0];
+				sortOrder = Sort.Direction.fromString(orderParams[1]);
+			} else {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+			}
+		}
+		Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by(sortOrder,sortBy));
 
 		Page<Address> page = addressService.searchAddress(example,pageable);
-		return addressMapper.addressToDtoList(page.getContent());
+
+		HttpHeaders headers = new HttpHeaders() {
+			{
+				add("X-Total-Count", String.valueOf(page.getTotalElements()));
+			}
+		};
+		return new ResponseEntity<>(page, headers, HttpStatus.OK);
+
 	}
 
 	private Address findByIdOrThrow(long id) {
