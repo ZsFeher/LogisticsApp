@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -16,10 +17,10 @@ public class Section {
 	@GeneratedValue
 	private long sectionId;
 
-	@OneToOne
+	@ManyToOne
 	private Milestone startMileStone;
 
-	@OneToOne
+	@ManyToOne
 	private Milestone endMilestone;
 
 

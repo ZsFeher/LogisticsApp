@@ -7,12 +7,10 @@ import java.util.Objects;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class Milestone {
@@ -26,6 +24,10 @@ public class Milestone {
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm")
 	private LocalDateTime plannedTime;
+
+
+	@OneToMany
+	private List<Section> sections;
 
 	public Milestone() {
 	}
@@ -57,6 +59,14 @@ public class Milestone {
 
 	public void setPlannedTime(LocalDateTime plannedTime) {
 		this.plannedTime = plannedTime;
+	}
+
+	public List<Section> getSections() {
+		return sections;
+	}
+
+	public void setSections(List<Section> sections) {
+		this.sections = sections;
 	}
 
 	@Override

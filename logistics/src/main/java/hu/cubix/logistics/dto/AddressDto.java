@@ -3,14 +3,24 @@ package hu.cubix.logistics.dto;
 import java.util.List;
 
 import hu.cubix.logistics.model.Milestone;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class AddressDto {
 
-	private int addressId;
+	private long addressId;
+	@NotEmpty
 	private String isoCode;
+	@NotEmpty
 	private String city;
+	@NotEmpty
 	private String street;
+	@Positive
+	@NotNull
 	private int houseNumber;
+	@Positive
+	@NotNull
 	private int zipCode;
 	private int latitude;
 	private int longitude;
@@ -28,11 +38,11 @@ public class AddressDto {
 		this.milestones = milestones;
 	}
 
-	public int getAddressId() {
+	public long getAddressId() {
 		return addressId;
 	}
 
-	public void setAddressId(int addressId) {
+	public void setAddressId(long addressId) {
 		this.addressId = addressId;
 	}
 

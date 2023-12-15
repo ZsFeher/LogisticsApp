@@ -15,7 +15,7 @@ public class TransportPlan {
 	@Id
 	@GeneratedValue
 	private long transportPlanId;
-	private int expectedIncome;
+	private double expectedIncome;
 
 	@OneToMany(mappedBy = "transportPlan", fetch = FetchType.EAGER)
 	private List<Section> sections;
@@ -23,9 +23,8 @@ public class TransportPlan {
 	public TransportPlan() {
 	}
 
-	public TransportPlan(int expectedIncome, List<Section> sections) {
+	public TransportPlan(int expectedIncome) {
 		this.expectedIncome = expectedIncome;
-		this.sections = sections;
 	}
 
 	public long getTransportPlanId() {
@@ -36,11 +35,11 @@ public class TransportPlan {
 		this.transportPlanId = transportPlanId;
 	}
 
-	public int getExpectedIncome() {
+	public double getExpectedIncome() {
 		return expectedIncome;
 	}
 
-	public void setExpectedIncome(int expectedIncome) {
+	public void setExpectedIncome(double expectedIncome) {
 		this.expectedIncome = expectedIncome;
 	}
 
