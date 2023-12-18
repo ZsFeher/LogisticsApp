@@ -43,11 +43,12 @@ public class TransportPlanService {
 
 			Section nextSection = transportPlanRepository.findNextSection(transportPlan.getTransportPlanId(), section.getSectionOrder()+1);
 
-			Milestone nextms = nextSection.getStartMileStone();
+			if(nextSection != null){ // section is not the last one in the transportplan
+				Milestone nextms = nextSection.getStartMileStone();
 
-			nextms.setPlannedTime(nextms.getPlannedTime().plusMinutes(delayInMinutes));
-			milestoneRepository.save(nextms);
-
+				nextms.setPlannedTime(nextms.getPlannedTime().plusMinutes(delayInMinutes));
+				milestoneRepository.save(nextms);
+			}
 		}
 
 		double expectedIncome = transportPlan.getExpectedIncome()*((100-delayService.getDecreasingPercent(delayInMinutes))*0.01);
