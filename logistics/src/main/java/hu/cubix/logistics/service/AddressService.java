@@ -2,7 +2,6 @@ package hu.cubix.logistics.service;
 
 import static hu.cubix.logistics.service.AddressSpecification.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 

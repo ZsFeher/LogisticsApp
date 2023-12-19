@@ -1,10 +1,5 @@
 package hu.cubix.logistics.dto;
 
-import hu.cubix.logistics.model.Milestone;
-import hu.cubix.logistics.model.TransportPlan;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-
 public class SectionDto {
 
 	private long sectionId;

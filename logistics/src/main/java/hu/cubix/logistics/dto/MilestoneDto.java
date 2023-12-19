@@ -2,8 +2,6 @@ package hu.cubix.logistics.dto;
 
 import java.time.LocalDateTime;
 
-import hu.cubix.logistics.model.Address;
-
 public class MilestoneDto {
 
 	private long milestoneId;
