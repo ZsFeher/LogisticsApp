@@ -5,12 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -64,6 +62,9 @@ public class SecurityConfig {
 								.requestMatchers(HttpMethod.POST, "/api/login").permitAll()
 								.requestMatchers( HttpMethod.POST, "/api/addresses/**").hasAuthority("addressmanager")
 								.requestMatchers( HttpMethod.PUT, "/api/addresses/**").hasAuthority("addressmanager")
+								.requestMatchers("/api/addresses/**").authenticated()
+								.requestMatchers("/api/sections/**").authenticated()
+								.requestMatchers("/api/milestones/**").authenticated()
 								.requestMatchers( "/api/transportPlans/**").hasAuthority("transportplanmanager")
 				)
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

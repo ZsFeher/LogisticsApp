@@ -2,17 +2,23 @@ package hu.cubix.logistics.dto;
 
 import java.util.List;
 
-import hu.cubix.logistics.model.Section;
-
 public class TransportPlanDto {
 
 	private long transportPlanId;
 	private int expectedIncome;
 	private List<SectionDto> sections;
 
+	public TransportPlanDto(){
+
+	}
+
 	public TransportPlanDto(int expectedIncome, List<SectionDto> sections) {
 		this.expectedIncome = expectedIncome;
 		this.sections = sections;
+	}
+
+	public TransportPlanDto(int expectedIncome) {
+		this.expectedIncome = expectedIncome;
 	}
 
 	public long getTransportPlanId() {

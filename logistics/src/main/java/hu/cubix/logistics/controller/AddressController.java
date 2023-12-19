@@ -61,7 +61,7 @@ public class AddressController {
 		}
 
 		Address createdAddress = addressService.create(a1);
-		return ResponseEntity.ok(createdAddress.getAddressId()); //TODO json-ben
+		return ResponseEntity.ok(createdAddress.getAddressId());
 	}
 
 	@DeleteMapping("/{id}")

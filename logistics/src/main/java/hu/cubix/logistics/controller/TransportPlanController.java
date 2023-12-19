@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import hu.cubix.logistics.dto.AddressDto;
 import hu.cubix.logistics.dto.TransportPlanDto;
 import hu.cubix.logistics.mapper.TransportPlanMapper;
 import hu.cubix.logistics.model.Milestone;
@@ -54,5 +53,18 @@ public class TransportPlanController {
 		TransportPlan t = transportPlanService.addDelay(tp,section,ms,delayInMinutes);
 
 		return transportPlanMapper.transportPlanToDto(t); //200 ok
+	}
+
+	@PostMapping
+	public ResponseEntity<Long> addTransportPlan(@RequestBody TransportPlanDto transportPlanDto)
+	{
+		TransportPlan transportPlan = transportPlanMapper.dtoToTransportPlan(transportPlanDto);
+
+		if(transportPlan == null || transportPlan.getTransportPlanId() > 0) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+		}
+
+		TransportPlan createdTP = transportPlanService.create(transportPlan);
+		return ResponseEntity.ok(createdTP.getTransportPlanId());
 	}
 }

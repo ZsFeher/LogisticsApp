@@ -1,8 +1,5 @@
 package hu.cubix.logistics.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import org.springframework.data.jpa.domain.Specification;
 
 import hu.cubix.logistics.model.Address;
@@ -16,12 +13,12 @@ public class AddressSpecification {
 	}
 	public static Specification<Address> cityStartsWith(String city)
 	{
-		return (root, cq, cb) -> cb.like(root.get(Address_.city), city + "%"); //TODO check case-insensitive
+		return (root, cq, cb) -> cb.like(cb.lower(root.get(Address_.city)), city.toLowerCase() + "%");
 	}
 
 	public static Specification<Address> streetStartsWith(String street)
 	{
-		return (root, cq, cb) -> cb.like(root.get(Address_.street), street + "%"); //TODO check case-insensitive
+		return (root, cq, cb) -> cb.like(cb.lower(root.get(Address_.street)), street.toLowerCase() + "%");
 	}
 
 	public static Specification<Address> isoCodeEquals(String country)
