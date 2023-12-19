@@ -1,17 +1,16 @@
 package hu.cubix.logistics.service;
 
-import java.net.http.HttpRequest;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import hu.cubix.logistics.config.LogisticsConfig;
 import hu.cubix.logistics.model.Milestone;
 import hu.cubix.logistics.model.Section;
 import hu.cubix.logistics.model.TransportPlan;
 import hu.cubix.logistics.repository.MilestoneRepository;
 import hu.cubix.logistics.repository.TransportPlanRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class TransportPlanService {
@@ -24,6 +23,18 @@ public class TransportPlanService {
 
 	@Autowired
 	DelayService delayService;
+
+	@Transactional
+	public TransportPlan create(TransportPlan transportPlan)
+	{
+		return save(transportPlan);
+	}
+
+	@Transactional
+	public TransportPlan save(TransportPlan transportPlan) {
+
+		return transportPlanRepository.save(transportPlan);
+	}
 
 	public TransportPlan addDelay(TransportPlan transportPlan, Section section, Milestone ms, long delayInMinutes){
 
